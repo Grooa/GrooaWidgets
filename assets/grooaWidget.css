@@ -15,26 +15,48 @@
   width: 100%;
 }
 
+.gw-title-frame {
+  height: 100%;
+
+  margin: auto;
+  max-width: 50em;
+
+  position: relative;
+
+  width: 100%;
+}
+
 .gw-title-container {
   bottom: 0;
 
   color: #ffffff;
 
-  margin: 1em 2em;
+  margin: 0;
 
+  padding: 1em;
   position: absolute;
 
   text-shadow: 2px 2px 4px rgba(0, 0, 0, .3);
+
+  width: 100%;
 }
 
 .gw-title-container > h2,
 .gw-title-container > em {
   padding: 0;
+
+  text-align: left;
 }
 
 .gw-title-container > h2 {
   color: #ffffff;
   font-size: 2em;
+}
+
+.gw-sub-title {
+  display: block;
+
+  text-align: center;
 }
 
 .gw-page-module-main {
