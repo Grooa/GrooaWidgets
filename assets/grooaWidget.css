@@ -1,0 +1,42 @@
+
+.gw-image-container {
+  height: 100%;
+
+  overflow: hidden;
+
+  position: absolute;
+
+  width: 100%;
+}
+
+.gw-image-container > img {
+  position: absolute;
+
+  width: 100%;
+}
+
+.gw-title-container {
+  bottom: 0;
+
+  color: #ffffff;
+
+  margin: 1em 2em;
+
+  position: absolute;
+
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, .3);
+}
+
+.gw-title-container > h2,
+.gw-title-container > em {
+  padding: 0;
+}
+
+.gw-title-container > h2 {
+  color: #ffffff;
+  font-size: 2em;
+}
+
+.gw-page-module-main {
+  white-space: pre-line;
+}
