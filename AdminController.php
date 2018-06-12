@@ -128,6 +128,12 @@ class AdminController
             'value' => !empty($widgetData['title']) ? $widgetData['title'] : null
         ]));
 
+        $form->addField(new \Ip\Form\Field\Checkbox([
+            'name' => 'hasTransparentBackground',
+            'label' => 'Use transparent background',
+            'value' => !empty($widgetData['hasTransparentBackground']) ? true : false // Be explicit
+        ]));
+
         $form->addField(new \Ip\Form\Field\Textarea([
             'name' => 'headerText',
             'label' => 'Header text',
