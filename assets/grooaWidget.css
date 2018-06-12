@@ -1,3 +1,41 @@
+/**
+ * GrooaWidgets Module
+ * Defines a module with the option of different styles
+ */
+.gw-module {
+  box-sizing: border-box;
+
+  padding: 1em;
+  position: relative;
+}
+
+.gw-module > h2 {
+  font-size: 2em;
+
+  padding: 0.5em;
+
+  text-align: center;
+}
+
+.gw-module-compact {
+  padding: 0;
+}
+
+.gw-module-light {
+  background-color: #ffffff;
+  border-bottom: #eeeeee solid 1px;
+  border-top: #eeeeee solid 1px;
+}
+
+.gw-module-centered {
+  align-items: center;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: flex-start;
+}
 
 .gw-image-container {
   height: 100%;
@@ -61,4 +99,61 @@
 
 .gw-page-module-main {
   white-space: pre-line;
+}
+
+.gw-module-header,
+.gw-module-footer {
+  box-sizing: border-box;
+
+  margin: auto;
+  max-width: 35em;
+
+  padding: 0;
+}
+
+/* Reset the blockquote styling */
+.gw-module-footer blockquote,
+.gw-module-header blockquote {
+  color: #68530F;
+
+  font-style: italic;
+  font-family: "Times New Roman", serif;
+  font-size: 1.3em;
+
+  margin: 0;
+}
+
+/**
+ * GrooaWidgets Module Item
+ * Used in ThreeItemSection, represents each item in a horizontal list
+ */
+
+.gw-module-item {
+  box-sizing: border-box;
+
+  display: block;
+
+  min-height: 10em;
+  max-width: 20em;
+
+  padding: 0.5em;
+  position: relative;
+
+  text-decoration: none;
+
+  width: 100%;
+}
+
+.gw-module-item:hover {
+  text-decoration: none;
+}
+
+.gw-module-item-image {
+  width: 100%;
+}
+
+/* Give a linked item, some interactivity (Don Norman: Feedback) */
+a.gw-module-item .gw-module-item-title:hover {
+  color: #333333;
+  text-decoration: underline;
 }

@@ -20,7 +20,10 @@ class AdminController
         switch ($widgetRecord['name']) {
             case 'ContentSection':
                 //create form prepopulated with current widget data
-                $form = $this->managementForm($widgetData);
+                $form = $this->contentSectionManagementForm($widgetData);
+                break;
+            case 'ThreeItemListSection':
+                $form = $this->threeItemManagementForm($widgetData);
                 break;
             default:
                 return new \Ip\Response\Json([
@@ -45,15 +48,15 @@ class AdminController
     /**
      * Check widget's posted data and return data to be stored or errors to be displayed
      */
-    public function checkForm()
+    public function checkContentSectionForm()
     {
         $data = ipRequest()->getPost();
-        $form = $this->managementForm();
+        $form = $this->contentSectionManagementForm();
         $data = $form->filterValues($data); //filter post data to remove any non form specific items
         $errors = $form->validate($data); //http://www.impresspages.org/docs/form-validation-in-php-3
         if ($errors) {
             //error
-            $data = array (
+            $data = array(
                 'status' => 'error',
                 'errors' => $errors
             );
@@ -62,7 +65,7 @@ class AdminController
             unset($data['aa']);
             unset($data['securityToken']);
             unset($data['antispam']);
-            $data = array (
+            $data = array(
                 'status' => 'ok',
                 'data' => $data
 
@@ -71,7 +74,132 @@ class AdminController
         return new \Ip\Response\Json($data);
     }
 
-    protected function managementForm($widgetData = array())
+    /**
+     * Check widget's posted data and return data to be stored or errors to be displayed
+     */
+    public function checkThreeItemForm()
+    {
+        $data = ipRequest()->getPost();
+        $form = $this->threeItemManagementForm();
+        $data = $form->filterValues($data); //filter post data to remove any non form specific items
+        $errors = $form->validate($data); //http://www.impresspages.org/docs/form-validation-in-php-3
+        if ($errors) {
+            //error
+            $data = array(
+                'status' => 'error',
+                'errors' => $errors
+            );
+        } else {
+            //success
+            unset($data['aa']);
+            unset($data['securityToken']);
+            unset($data['antispam']);
+            $data = array(
+                'status' => 'ok',
+                'data' => $data
+
+            );
+        }
+        return new \Ip\Response\Json($data);
+    }
+
+    protected function threeItemManagementForm($widgetData = array())
+    {
+        $form = new \Ip\Form();
+
+        $form->setEnvironment(\Ip\Form::ENVIRONMENT_ADMIN);
+
+        //setting hidden input field so that this form would be submitted to 'errorCheck' method of this controller. (http://www.impresspages.org/docs/controller)
+        $form->addField(new \Ip\Form\Field\Hidden(
+            array(
+                'name' => 'aa',
+                'value' => 'GrooaWidgets.checkThreeItemForm'
+            )
+        ));
+
+        // Header
+        $headerFieldset = new \Ip\Form\Fieldset();
+        $headerFieldset ->setLabel('Header');
+        $form->addFieldset($headerFieldset);
+
+        $form->addField(new \Ip\Form\Field\Text([
+            'name' => 'title',
+            'label' => 'Title',
+            'value' => !empty($widgetData['title']) ? $widgetData['title'] : null
+        ]));
+
+        $form->addField(new \Ip\Form\Field\Textarea([
+            'name' => 'headerText',
+            'label' => 'Header text',
+            'value' => !empty($widgetData['headerText']) ? $widgetData['headerText'] : null
+        ]));
+
+        // 1st Item
+        $form = $this->addItemFieldArea('firstItem', 1, $form, $widgetData);
+
+        // 2nd Item
+        $form = $this->addItemFieldArea('secondItem', 2, $form, $widgetData);
+
+        // 3rd Item
+        $form = $this->addItemFieldArea('thirdItem', 3, $form, $widgetData);
+
+        // Footer
+        $footerFieldset = new \Ip\Form\Fieldset();
+        $footerFieldset ->setLabel('Footer');
+        $form->addFieldset($footerFieldset);
+
+        $form->addField(new \Ip\Form\Field\Textarea([
+            'name' => 'footerText',
+            'label' => 'Footer text',
+            'value' => !empty($widgetData['footerText']) ? $widgetData['footerText'] : null
+        ]));
+
+        return $form;
+    }
+
+    private function addItemFieldArea($name, $index, $form, $widgetData)
+    {
+        $itemFieldset = new \Ip\Form\Fieldset();
+        $itemFieldset->setLabel($index . '. Item');
+        $form->addFieldset($itemFieldset);
+
+        $linkName = $name . 'Link';
+        $form->addField(new \Ip\Form\Field\Url([
+            'name' => $linkName,
+            'label' => 'Page URL',
+            'hint' => 'Link to where the user should go, if the item is clicked',
+            'value' => !empty($widgetData[$linkName]) ? $widgetData[$linkName] : null,
+        ]));
+
+        $imageName = $name . 'Image';
+        $form->addField(new \Ip\Form\Field\RepositoryFile([
+            'name' => $imageName,
+            'label' => 'Image',
+            'value' => !empty($widgetData[$imageName]) ? $widgetData[$imageName] : null,
+            'preview' => 'thumbnails', //or list. This defines how files have to be displayed in the repository browser
+            'fileLimit' => 1, //optional. Limit file count that can be selected. -1 For unlimited
+            'filterExtensions' => array('jpg', 'jpeg', 'png', 'gif', 'webm', 'ogg', 'svg') //optional
+        ]));
+
+        $titleName = $name . 'Title';
+        $form->addField(new \Ip\Form\Field\Text([
+            'name' => $titleName,
+            'label' => 'Title',
+            'value' => !empty($widgetData[$titleName]) ? $widgetData[$titleName] : null,
+            'hint' => 'This items title. If omitted, will it hide the whole section!'
+        ]));
+
+        $bodyName = $name . 'Body';
+        $form->addField(new \Ip\Form\Field\Text([
+            'name' => $bodyName,
+            'label' => 'Short text',
+            'value' => !empty($widgetData[$bodyName]) ? $widgetData[$bodyName] : null
+        ]));
+
+        return $form;
+    }
+
+    protected function contentSectionManagementForm($widgetData = array())
     {
         $form = new \Ip\Form();
 
@@ -81,7 +209,7 @@ class AdminController
         $field = new \Ip\Form\Field\Hidden(
             array(
                 'name' => 'aa',
-                'value' => 'GrooaWidgets.checkForm'
+                'value' => 'GrooaWidgets.checkContentSectionForm'
             )
         );
 
