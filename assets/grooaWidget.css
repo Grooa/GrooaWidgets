@@ -160,7 +160,10 @@
 }
 
 .gw-module-item-image {
-  max-width: 30em;
+  display: block;
+
+  margin: auto;
+  max-width: 15em;
 
   width: 100%;
 }
