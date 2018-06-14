@@ -3,6 +3,8 @@
 namespace Plugin\GrooaWidgets;
 
 
+use Ip\Form;
+
 class AdminController
 {
     /**
@@ -25,11 +27,17 @@ class AdminController
             case 'ThreeItemListSection':
                 $form = $this->threeItemManagementForm($widgetData);
                 break;
+
+            case 'Slider':
+                $form = $this->sliderManagementForm($widgetData);
+                break;
             default:
-                return new \Ip\Response\Json([
+                $err = new \Ip\Response\Json([
                     'error' => 'Unknown widget',
                     'widget' => $widgetRecord
                 ]);
+                $err->setStatusCode(400);
+                return $err;
         }
 
 
@@ -103,23 +111,42 @@ class AdminController
         return new \Ip\Response\Json($data);
     }
 
+    /**
+     * Check widget's posted data and return data to be stored or errors to be displayed
+     */
+    public function checkSliderForm()
+    {
+        $data = ipRequest()->getPost();
+        $form = $this->sliderManagementForm();
+        $data = $form->filterValues($data); //filter post data to remove any non form specific items
+        $errors = $form->validate($data); //http://www.impresspages.org/docs/form-validation-in-php-3
+        if ($errors) {
+            //error
+            $data = array(
+                'status' => 'error',
+                'errors' => $errors
+            );
+        } else {
+            //success
+            unset($data['aa']);
+            unset($data['securityToken']);
+            unset($data['antispam']);
+            $data = array(
+                'status' => 'ok',
+                'data' => $data
+
+            );
+        }
+        return new \Ip\Response\Json($data);
+    }
+
     protected function threeItemManagementForm($widgetData = array())
     {
-        $form = new \Ip\Form();
-
-        $form->setEnvironment(\Ip\Form::ENVIRONMENT_ADMIN);
-
-        //setting hidden input field so that this form would be submitted to 'errorCheck' method of this controller. (http://www.impresspages.org/docs/controller)
-        $form->addField(new \Ip\Form\Field\Hidden(
-            array(
-                'name' => 'aa',
-                'value' => 'GrooaWidgets.checkThreeItemForm'
-            )
-        ));
+        $form = $this->setupManagementForm('checkThreeItemForm');
 
         // Header
         $headerFieldset = new \Ip\Form\Fieldset();
-        $headerFieldset ->setLabel('Header');
+        $headerFieldset->setLabel('Header');
         $form->addFieldset($headerFieldset);
 
         $form->addField(new \Ip\Form\Field\Text([
@@ -151,7 +178,7 @@ class AdminController
 
         // Footer
         $footerFieldset = new \Ip\Form\Fieldset();
-        $footerFieldset ->setLabel('Footer');
+        $footerFieldset->setLabel('Footer');
         $form->addFieldset($footerFieldset);
 
         $form->addField(new \Ip\Form\Field\Textarea([
@@ -207,19 +234,7 @@ class AdminController
 
     protected function contentSectionManagementForm($widgetData = array())
     {
-        $form = new \Ip\Form();
-
-        $form->setEnvironment(\Ip\Form::ENVIRONMENT_ADMIN);
-
-        //setting hidden input field so that this form would be submitted to 'errorCheck' method of this controller. (http://www.impresspages.org/docs/controller)
-        $field = new \Ip\Form\Field\Hidden(
-            array(
-                'name' => 'aa',
-                'value' => 'GrooaWidgets.checkContentSectionForm'
-            )
-        );
-
-        $form->addField($field); // Keep at top
+        $form = $this->setupManagementForm('checkContentSectionForm');
 
         /**
          * Place own values bellow
@@ -267,4 +282,90 @@ class AdminController
         return $form;
     }
 
+    protected function sliderManagementForm($widgetData = []): Form
+    {
+        $form = $this->setupManagementForm('checkSliderForm');
+
+        $slides = ['first', 'second', 'third'];
+
+        foreach ($slides as $key => $slide) {
+            $form = $this->addSliderView($slide, $key + 1, $form, $widgetData);
+        }
+
+        $form->addField(new Form\Field\Hidden([
+            'name' => 'views',
+            'value' => json_encode($slides)
+        ]));
+
+        return $form;
+    }
+
+    private function addSliderView(string $name, int $index, Form $form, array $widgetData): Form
+    {
+        $fieldset = new \Ip\Form\Fieldset();
+        $fieldset->setLabel('Slide: ' . $index );
+        $form->addFieldset($fieldset);
+
+        $linkName = $name . 'Link';
+        $form->addField(new \Ip\Form\Field\Url([
+            'name' => $linkName,
+            'label' => 'Redirect URL',
+            'hint' => 'Link to where the user should go, if he/she clicks the button on the slide',
+            'value' => !empty($widgetData[$linkName]) ? $widgetData[$linkName] : null,
+        ]));
+
+        $linkLabelName = $name . 'LinkLabel';
+        $form->addField(new Form\Field\Text([
+            'name' => $linkLabelName,
+            'label' => 'Redirect URL Label',
+            'hint' => 'The text which is displayed on the button',
+            'value' => !empty($widgetData[$linkLabelName]) ? $widgetData[$linkLabelName] : null
+        ]));
+
+        $imageName = $name . 'Image';
+        $form->addField(new \Ip\Form\Field\RepositoryFile([
+            'name' => $imageName,
+            'label' => 'Image',
+            'hint' => 'Cover image for this slide',
+            'validators' => ['Required'],
+            'value' => !empty($widgetData[$imageName]) ? $widgetData[$imageName] : null,
+            'preview' => 'thumbnails',
+            'fileLimit' => 1, //optional. Limit file count that can be selected. -1 For unlimited
+            'filterExtensions' => array('jpg', 'jpeg', 'png', 'gif', 'webm', 'ogg', 'svg') //optional
+        ]));
+
+        $titleName = $name . 'Title';
+        $form->addField(new \Ip\Form\Field\Text([
+            'name' => $titleName,
+            'label' => 'Title',
+            'value' => !empty($widgetData[$titleName]) ? $widgetData[$titleName] : null,
+            'hint' => 'This items title. If omitted, will it hide the whole section!'
+        ]));
+
+        $bodyName = $name . 'Body';
+        $form->addField(new \Ip\Form\Field\Text([
+            'name' => $bodyName,
+            'label' => 'Short text',
+            'value' => !empty($widgetData[$bodyName]) ? $widgetData[$bodyName] : null
+        ]));
+
+        return $form;
+    }
+
+    private function setupManagementForm(string $validationMethodName, ?array $widgetData = []): Form
+    {
+        $form = new Form();
+
+        $form->setEnvironment(Form::ENVIRONMENT_ADMIN);
+
+        //setting hidden input field so that this form would be submitted to 'errorCheck' method of this controller. (http://www.impresspages.org/docs/controller)
+        $form->addField(new Form\Field\Hidden(
+            array(
+                'name' => 'aa',
+                'value' => 'GrooaWidgets.' . $validationMethodName
+            )
+        ));
+
+        return $form;
+    }
 }
