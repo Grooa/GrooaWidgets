@@ -53,6 +53,17 @@
   width: 100%;
 }
 
+.gw-module-cover-image {
+  background: #bbbbbb no-repeat center;
+  background-size: cover;
+
+  height: 100%;
+
+  position: relative;
+
+  width: 100%;
+}
+
 .gw-title-frame {
   height: 100%;
 
@@ -149,6 +160,8 @@
 }
 
 .gw-module-item-image {
+  max-width: 30em;
+
   width: 100%;
 }
 

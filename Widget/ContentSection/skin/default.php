@@ -6,8 +6,8 @@ $hasTransparentBackground = !empty($hasTransparentBackground) ? $hasTransparentB
     <?php if (!empty($backgroundCover)): ?>
         <div class="page-module-header">
             <div class="gw-image-container">
-                <img src="<?= ipFileUrl('file/repository/' . $backgroundCover[0]) ?>"
-                     alt="<?= !empty($title) ? $title : '[Widget header]' ?>">
+                <div class="gw-module-cover-image"
+                     style="background-image: url('<?= ipFileUrl('file/repository/' . $backgroundCover[0]) ?>')"></div>
             </div>
             <div class="gw-title-frame">
                 <div class="gw-title-container">
