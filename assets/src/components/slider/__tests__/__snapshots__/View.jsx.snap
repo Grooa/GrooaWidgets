@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<View /> should render properly 1`] = `
+<div>
+  <div
+    class="gw-slider-slide-image-container"
+  >
+    <div
+      class="gw-slider-slide-image"
+      style="background-image:url(\\"http://test.com/test.jpg\\")"
+    />
+  </div>
+  <div
+    class="gw-slider-slide-content"
+  >
+    <h3
+      class="gw-slider-slide-title"
+    >
+      Hello world
+    </h3>
+    <div
+      class="gw-slider-slide-body"
+    >
+      Lorem lipsum dolor sit amed
+    </div>
+    <a
+      class="gw-btn gw-btn-pill gw-slider-slide-button"
+      href="/testTest"
+    >
+      Go to Test
+    </a>
+  </div>
+</div>
+`;
