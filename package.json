@@ -9,7 +9,7 @@
     "test:coverage": "jest --config jest.config.js --coverage",
     "lint": "eslint \"assets/src/**/*\"",
     "build": "webpack-cli --config webpack.config.js --mode development",
-    "build:prod": "webpack-cli --config webpack.config.prod.js --mode production",
+    "build:prod": "webpack-cli --config webpack.config.prod.js --mode production || true",
     "watch": "npm run build -- --watch",
     "precommit": "echo \"Running code-linters\" && npm run lint",
     "prepush": "npm run test",

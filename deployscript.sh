@@ -29,30 +29,4 @@ npm run deploy
 ##
 
 printf "\nCopying files over to server\n\n"
-
-printf "\n\t root --> Server\n\n"
-scp * ${SCP_DIR}/
-
-# General static files
-# Basically copy everything at root level
-printf "\n\tassets/* --> Server/assets/* \n\n"
-scp assets/* ${SCP_DIR}/assets/
-
-# JavaScript
-printf "\n\tassets/dist/ --> Server/assets/ \n\n"
-
-scp -r assets/dist/ ${SCP_DIR}/assets/
-
-# Setup
-printf "\n\tSetup/ --> Server/ \n\n"
-scp -r Setup/ ${SCP_DIR}/
-
-# Setup
-printf "\n\tview/ --> Server/ \n\n"
-scp -r view/ ${SCP_DIR}/
-
-# Widget
-printf "\n\tWidget/ --> Server/ \n\n"
-scp -r Widget/ ${SCP_DIR}/
-
-printf "\n\nDeployment complete!\n"
+rsync -r --exclude 'node_modules' --exclude 'git' . ${SCP_DIR}
