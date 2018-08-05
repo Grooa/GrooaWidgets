@@ -1,4 +1,4 @@
-var IpWidget_TopThreeSection = function () {
+var IpWidget_ThumbnailCard = function () {
   this.widgetObject = null;
   this.widgetOverlay = null;
 

@@ -238,6 +238,42 @@ a.gw-module-item .gw-module-item-title:hover {
 }
 
 /**
+ * GrooaWidgets ThumbnailCard
+ */
+.gw-module-thumbnailcard {
+  height: 15em;
+
+  margin: auto;
+
+  position: relative;
+
+  width: 10em;
+}
+
+.gw-module-thumbnailcard-image {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, .05) 2px 2px 3px;
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);;
+}
+
+.gw-module-thumbnailcard-image:hover {
+  box-shadow: rgba(0, 0, 0, .05) 3px 2px 5px;
+
+  transform: scale(1.03);
+}
+
+.gw-module-thumbnailcard-image > img {
+  display: block;
+
+  width: 100%;
+}
+
+/**
  * GrooaWidgets Slider
  */
 .gw-slider {

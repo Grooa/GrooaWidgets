@@ -34,6 +34,9 @@ class AdminController
             case 'TopThreeSection':
                 $form = $this->topThreeSectionManagementForm($widgetData);
                 break;
+            case 'ThumbnailCard':
+                $form = $this->cardManagementForm($widgetData);
+                break;
             default:
                 $err = new \Ip\Response\Json([
                     'error' => 'Unknown widget',
@@ -52,6 +55,69 @@ class AdminController
             'popup' => $popupHtml
         );
         //Return rendered widget management popup HTML in JSON format
+        return new \Ip\Response\Json($data);
+    }
+
+    private function cardManagementForm($widgetData = array())
+    {
+        $form = $this->setupManagementForm('checkCardManagementForm');
+
+        $form->addField(new \Ip\Form\Field\Text([
+            'name' => 'title',
+            'label' => 'Title',
+            'value' => !empty($widgetData['title']) ? $widgetData['title'] : null
+        ]));
+
+        $form->addField(new \Ip\Form\Field\Url([
+            'name' => 'link',
+            'label' => 'Page URL',
+            'hint' => 'Link to where the user should go, if the item is clicked',
+            'value' => !empty($widgetData['link']) ? $widgetData['link'] : null,
+        ]));
+
+        $form->addField(new \Ip\Form\Field\RepositoryFile([
+            'name' => 'file',
+            'label' => 'File',
+            'hint' => 'Reference to a file. Used as alternative to a link',
+            'value' => !empty($widgetData['file']) ? $widgetData['file'] : null,
+            'fileLimit' => 1
+        ]));
+
+        $form->addField(new \Ip\Form\Field\RepositoryFile([
+            'name' => 'image',
+            'label' => 'Image',
+            'value' => !empty($widgetData['image']) ? $widgetData['image'] : null,
+            'preview' => 'thumbnails', //or list. This defines how files have to be displayed in the repository browser
+            'fileLimit' => 1, //optional. Limit file count that can be selected. -1 For unlimited
+            'filterExtensions' => array('jpg', 'jpeg', 'png', 'gif', 'webm', 'ogg', 'svg') //optional
+        ]));
+
+        return $form;
+    }
+
+    public function checkCardManagementForm()
+    {
+        $data = ipRequest()->getPost();
+        $form = $this->cardManagementForm();
+        $data = $form->filterValues($data); //filter post data to remove any non form specific items
+        $errors = $form->validate($data); //http://www.impresspages.org/docs/form-validation-in-php-3
+        if ($errors) {
+            //error
+            $data = array(
+                'status' => 'error',
+                'errors' => $errors
+            );
+        } else {
+            //success
+            unset($data['aa']);
+            unset($data['securityToken']);
+            unset($data['antispam']);
+            $data = array(
+                'status' => 'ok',
+                'data' => $data
+
+            );
+        }
         return new \Ip\Response\Json($data);
     }
 

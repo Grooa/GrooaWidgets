@@ -1,5 +1,3 @@
-"use strict";
-
 var IpWidget_Slider = function () {
   this.widgetObject = null;
   this.widgetOverlay = null;

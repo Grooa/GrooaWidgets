@@ -1,5 +1,3 @@
-"use strict";
-
 var IpWidget_ThreeItemListSection = function () {
   this.widgetObject = null;
   this.widgetOverlay = null;
