@@ -189,9 +189,14 @@ a.gw-module-item .gw-module-item-title:hover {
 }
 
 .gw-module-list-thumbnail {
+  box-sizing: border-box;
+
+  max-width: 10em;
+
+  padding: 1em 2em;
   position: relative;
 
-  width: 10em;
+  width: 5em;
 }
 
 .columns > .gw-module-list-thumbnail {
@@ -199,14 +204,18 @@ a.gw-module-item .gw-module-item-title:hover {
 }
 
 @media screen and (max-width: 40em) {
+  .gw-module-list-thumbnail {
+    width: 5em;
+  }
+
   .columns > .gw-module-list-thumbnail {
     flex-basis: 5em;
-
-    width: 5em;
   }
 }
 
 .gw-module-list-thumbnail > img {
+  display: block;
+
   height: auto;
 
   margin: auto;
