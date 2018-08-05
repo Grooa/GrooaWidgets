@@ -188,10 +188,6 @@ a.gw-module-item .gw-module-item-title:hover {
   width: 100%;
 }
 
-.gw-module-list > li {
-
-}
-
 .gw-module-list-thumbnail {
   position: relative;
 
@@ -200,6 +196,14 @@ a.gw-module-item .gw-module-item-title:hover {
 
 .columns > .gw-module-list-thumbnail {
   flex-basis: 10em;
+}
+
+@media screen and (max-width: 40em) {
+  .columns > .gw-module-list-thumbnail {
+    flex-basis: 5em;
+
+    width: 5em;
+  }
 }
 
 .gw-module-list-thumbnail > img {
