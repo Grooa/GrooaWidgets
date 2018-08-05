@@ -175,6 +175,56 @@ a.gw-module-item .gw-module-item-title:hover {
 }
 
 /**
+ * Grooa Widgets TopThreeSection
+ */
+.gw-module-list {
+  list-style: none;
+
+  margin: auto;
+  max-width: 50em;
+
+  padding: 0;
+
+  width: 100%;
+}
+
+.gw-module-list > li {
+
+}
+
+.gw-module-list-thumbnail {
+  position: relative;
+
+  width: 10em;
+}
+
+.columns > .gw-module-list-thumbnail {
+  flex-basis: 10em;
+}
+
+.gw-module-list-thumbnail > img {
+  height: auto;
+
+  margin: auto;
+
+  width: 100%;
+}
+
+.gw-module-list-body {
+  text-align: left;
+}
+
+.columns > .gw-module-list-body {
+  flex: 7;
+}
+
+.gw-module-list-body > h3 {
+  padding: 0;
+
+  text-align: left;
+}
+
+/**
  * GrooaWidgets Slider
  */
 .gw-slider {
