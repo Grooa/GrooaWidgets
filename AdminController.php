@@ -250,6 +250,12 @@ class AdminController
             'value' => !empty($widgetData['subTitle']) ? $widgetData['subTitle'] : null
         ]));
 
+        $form->addField(new \Ip\Form\Field\Checkbox([
+            'name' => 'hasTransparentBackground',
+            'label' => 'Use transparent background',
+            'value' => !empty($widgetData['hasTransparentBackground']) ? true : false // Be explicit
+        ]));
+
         $nths = [3, 2, 1];
 
         foreach($nths as $nth) {
